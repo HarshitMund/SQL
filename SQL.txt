@@ -327,4 +327,391 @@ mysql> SELECT * FROM EMPLOYEE LIMIT 9,3;
                                                                        MARKSHEET
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+mysql> show tables;
++----------------+
+| Tables_in_rays |
++----------------+
+| employee       |
++----------------+
+1 row in set (0.00 sec)
 
+mysql> CREATE TABLE MARKSHEET(ID INT PRIAMRY KEY, ROLLNO INT, NAME VARCHER(45), PHY INT, CHM INT, MATHS INT);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PRIAMRY KEY, ROLLNO INT, NAME VARCHER(45), PHY INT, CHM INT, MATHS INT)' at line 1
+mysql> CREATE TABLE MARKSHEET(ID INT PRIMARY KEY, ROLLNO INT, NAME VARCHER(45), PHY INT, CHM INT, MATHS INT);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'VARCHER(45), PHY INT, CHM INT, MATHS INT)' at line 1
+mysql> CREATE TABLE MARKSHEET(ID INT PRIMARY KEY, ROLLNO INT, NAME VARCHAR(45), PHY INT, CHM INT, MATHS INT);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO MARKSHEET VALUES(1, 101, 'SAI', 54, 65, 98);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO MARKSHEET VALUES(2, 102, 'BAVARA', 75, 78, 90), (3, 201, 'DEV', 43, 32, 37), (3, 202, 'RAGHAV', 55, 50, 43);
+ERROR 1062 (23000): Duplicate entry '3' for key 'marksheet.PRIMARY'
+mysql> INSERT INTO MARKSHEET VALUES(2, 102, 'BAVARA', 75, 78, 90), (3, 201, 'DEV', 43, 32, 37), (4, 202, 'RAGHAV', 55, 50, 43);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM MARKSHEET;
++----+--------+--------+------+------+-------+
+| ID | ROLLNO | NAME   | PHY  | CHM  | MATHS |
++----+--------+--------+------+------+-------+
+|  1 |    101 | SAI    |   54 |   65 |    98 |
+|  2 |    102 | BAVARA |   75 |   78 |    90 |
+|  3 |    201 | DEV    |   43 |   32 |    37 |
+|  4 |    202 | RAGHAV |   55 |   50 |    43 |
++----+--------+--------+------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO MARKSHEET VALUES(5, 103, 'ASHU', 74, 68, 49), (6, 205, 'AMIT', 33, 33, 35), (7, 104, 'SIDDHANTA', 60, 68, 58), (8, 105, 'PRATEEK', 65, 74, 53), (9, 206, 'PRATISH', 89, 90, 95),(10, 106, 'LAXMI', 31, 34, 30);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM MARKSHEET;
++----+--------+-----------+------+------+-------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS |
++----+--------+-----------+------+------+-------+
+|  1 |    101 | SAI       |   54 |   65 |    98 |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |
+|  3 |    201 | DEV       |   43 |   32 |    37 |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |
++----+--------+-----------+------+------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT *, (PHY+CHM+MATHS) AS TOTAL  FROM MARKSHEET;
++----+--------+-----------+------+------+-------+-------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | TOTAL |
++----+--------+-----------+------+------+-------+-------+
+|  1 |    101 | SAI       |   54 |   65 |    98 |   217 |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |   243 |
+|  3 |    201 | DEV       |   43 |   32 |    37 |   112 |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |   148 |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |   191 |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |   101 |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |   186 |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |   192 |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |   274 |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |    95 |
++----+--------+-----------+------+------+-------+-------+
+10 rows in set (0.05 sec)
+
+mysql> SELECT *, (PHY+CHM+MATHS) AS TOTAL, ((PHY+CHM+MATHS)/3) AS PERCENTAGE  FROM MARKSHEET;
++----+--------+-----------+------+------+-------+-------+------------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | TOTAL | PERCENTAGE |
++----+--------+-----------+------+------+-------+-------+------------+
+|  1 |    101 | SAI       |   54 |   65 |    98 |   217 |    72.3333 |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |   243 |    81.0000 |
+|  3 |    201 | DEV       |   43 |   32 |    37 |   112 |    37.3333 |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |   148 |    49.3333 |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |   191 |    63.6667 |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |   101 |    33.6667 |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |   186 |    62.0000 |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |   192 |    64.0000 |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |   274 |    91.3333 |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |    95 |    31.6667 |
++----+--------+-----------+------+------+-------+-------+------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT *, ((PHY+CHM+MATHS)/3) AS PERCENTAGE  FROM MARKSHEET;
++----+--------+-----------+------+------+-------+------------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | PERCENTAGE |
++----+--------+-----------+------+------+-------+------------+
+|  1 |    101 | SAI       |   54 |   65 |    98 |    72.3333 |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |    81.0000 |
+|  3 |    201 | DEV       |   43 |   32 |    37 |    37.3333 |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |    49.3333 |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |    63.6667 |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |    33.6667 |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |    62.0000 |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |    64.0000 |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |    91.3333 |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |    31.6667 |
++----+--------+-----------+------+------+-------+------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT *, (PHY+CHM+MATHS) AS TOTAL, ((PHY+CHM+MATHS)/3) AS PERCENTAGE, IF (PHY >= 33 AND CHM >= 33 AND MATHS >= 33, 'PASS', 'FAIL') AS RESULT  FROM MARKSHEET;
++----+--------+-----------+------+------+-------+-------+------------+--------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | TOTAL | PERCENTAGE | RESULT |
++----+--------+-----------+------+------+-------+-------+------------+--------+
+|  1 |    101 | SAI       |   54 |   65 |    98 |   217 |    72.3333 | PASS   |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |   243 |    81.0000 | PASS   |
+|  3 |    201 | DEV       |   43 |   32 |    37 |   112 |    37.3333 | FAIL   |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |   148 |    49.3333 | PASS   |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |   191 |    63.6667 | PASS   |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |   101 |    33.6667 | PASS   |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |   186 |    62.0000 | PASS   |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |   192 |    64.0000 | PASS   |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |   274 |    91.3333 | PASS   |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |    95 |    31.6667 | FAIL   |
++----+--------+-----------+------+------+-------+-------+------------+--------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT *, IF (PHY >= 33 AND CHM >= 33 AND MATHS >= 33, 'PASS', 'FAIL') AS RESULT  FROM MARKSHEET;
++----+--------+-----------+------+------+-------+--------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | RESULT |
++----+--------+-----------+------+------+-------+--------+
+|  1 |    101 | SAI       |   54 |   65 |    98 | PASS   |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 | PASS   |
+|  3 |    201 | DEV       |   43 |   32 |    37 | FAIL   |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 | PASS   |
+|  5 |    103 | ASHU      |   74 |   68 |    49 | PASS   |
+|  6 |    205 | AMIT      |   33 |   33 |    35 | PASS   |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 | PASS   |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 | PASS   |
+|  9 |    206 | PRATISH   |   89 |   90 |    95 | PASS   |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 | FAIL   |
++----+--------+-----------+------+------+-------+--------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT *, (PHY+CHM+MATHS) AS TOTAL, ((PHY+CHM+MATHS)/3) AS PERCENTAGE, IF (PHY >= 33 AND CHM >= 33 AND MATHS >= 33, 'PASS', 'FAIL') AS RESULT  FROM MARKSHEET ORDER BY TOTAL DESC;
++----+--------+-----------+------+------+-------+-------+------------+--------+
+| ID | ROLLNO | NAME      | PHY  | CHM  | MATHS | TOTAL | PERCENTAGE | RESULT |
++----+--------+-----------+------+------+-------+-------+------------+--------+
+|  9 |    206 | PRATISH   |   89 |   90 |    95 |   274 |    91.3333 | PASS   |
+|  2 |    102 | BAVARA    |   75 |   78 |    90 |   243 |    81.0000 | PASS   |
+|  1 |    101 | SAI       |   54 |   65 |    98 |   217 |    72.3333 | PASS   |
+|  8 |    105 | PRATEEK   |   65 |   74 |    53 |   192 |    64.0000 | PASS   |
+|  5 |    103 | ASHU      |   74 |   68 |    49 |   191 |    63.6667 | PASS   |
+|  7 |    104 | SIDDHANTA |   60 |   68 |    58 |   186 |    62.0000 | PASS   |
+|  4 |    202 | RAGHAV    |   55 |   50 |    43 |   148 |    49.3333 | PASS   |
+|  3 |    201 | DEV       |   43 |   32 |    37 |   112 |    37.3333 | FAIL   |
+|  6 |    205 | AMIT      |   33 |   33 |    35 |   101 |    33.6667 | PASS   |
+| 10 |    106 | LAXMI     |   31 |   34 |    30 |    95 |    31.6667 | FAIL   |
++----+--------+-----------+------+------+-------+-------+------------+--------+
+10 rows in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                PAGINATION
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  4 | SAI       | TCL        |   45000 |
+|  5 | AMIT      | CGI        |   56000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
+|  8 | PRATEEK   | WIPRO      |   60000 |
+|  9 | KANHA     | MINDTREE   |   65000 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |
++----+-----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 0,3;
++----+------+------------+---------+
+| ID | NAME | COMPANY    | SAALARY |
++----+------+------------+---------+
+|  1 | ASHU | HCL        |   35000 |
+|  2 | RAVI | SEGUROSOFT |   60000 |
+|  3 | DEV  | INFOSYS    |   50000 |
++----+------+------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 3,3;
++----+--------+---------+---------+
+| ID | NAME   | COMPANY | SAALARY |
++----+--------+---------+---------+
+|  4 | SAI    | TCL     |   45000 |
+|  5 | AMIT   | CGI     |   56000 |
+|  6 | BAVARA | EY      |   45000 |
++----+--------+---------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 6,3;
++----+-----------+----------+---------+
+| ID | NAME      | COMPANY  | SAALARY |
++----+-----------+----------+---------+
+|  7 | SIDDHANTA | CGI      |   80000 |
+|  8 | PRATEEK   | WIPRO    |   60000 |
+|  9 | KANHA     | MINDTREE |   65000 |
++----+-----------+----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 9,3;
++----+----------+-----------+---------+
+| ID | NAME     | COMPANY   | SAALARY |
++----+----------+-----------+---------+
+| 10 | HIMANSHU | ACCENTURE |   56000 |
++----+----------+-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 0,5;
++----+------+------------+---------+
+| ID | NAME | COMPANY    | SAALARY |
++----+------+------------+---------+
+|  1 | ASHU | HCL        |   35000 |
+|  2 | RAVI | SEGUROSOFT |   60000 |
+|  3 | DEV  | INFOSYS    |   50000 |
+|  4 | SAI  | TCL        |   45000 |
+|  5 | AMIT | CGI        |   56000 |
++----+------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 5,5;
++----+-----------+-----------+---------+
+| ID | NAME      | COMPANY   | SAALARY |
++----+-----------+-----------+---------+
+|  6 | BAVARA    | EY        |   45000 |
+|  7 | SIDDHANTA | CGI       |   80000 |
+|  8 | PRATEEK   | WIPRO     |   60000 |
+|  9 | KANHA     | MINDTREE  |   65000 |
+| 10 | HIMANSHU  | ACCENTURE |   56000 |
++----+-----------+-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 0,7;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  4 | SAI       | TCL        |   45000 |
+|  5 | AMIT      | CGI        |   56000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
++----+-----------+------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LIMIT 7,7;
++----+----------+-----------+---------+
+| ID | NAME     | COMPANY   | SAALARY |
++----+----------+-----------+---------+
+|  8 | PRATEEK  | WIPRO     |   60000 |
+|  9 | KANHA    | MINDTREE  |   65000 |
+| 10 | HIMANSHU | ACCENTURE |   56000 |
++----+----------+-----------+---------+
+3 rows in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                         HIGHEST, SECOND HIGHEST, THIRD HIGHEST, LOWEST, SECOND LOWEST, THIRD LOWEST
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_rays |
++----------------+
+| employee       |
+| marksheet      |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE
+    -> ;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  4 | SAI       | TCL        |   45000 |
+|  5 | AMIT      | CGI        |   56000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
+|  8 | PRATEEK   | WIPRO      |   60000 |
+|  9 | KANHA     | MINDTREE   |   65000 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |
++----+-----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY DESC LIMIT 0,1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC LIMIT 0,1' at line 1
+mysql> SELECT * FROM EMPLOYEE LIMIT 0, 1  ORDER BY DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ORDER BY DESC' at line 1
+mysql> SELECT * FROM EMPLOYEE LIMIT 0, 1  ORDER BY SAALARY DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ORDER BY SAALARY DESC' at line 1
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY DESC LIMIT 0,1;
++----+-----------+---------+---------+
+| ID | NAME      | COMPANY | SAALARY |
++----+-----------+---------+---------+
+|  7 | SIDDHANTA | CGI     |   80000 |
++----+-----------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY DESC LIMIT 1,1;
++----+-------+----------+---------+
+| ID | NAME  | COMPANY  | SAALARY |
++----+-------+----------+---------+
+|  9 | KANHA | MINDTREE |   65000 |
++----+-------+----------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY DESC LIMIT 2,1;
++----+------+------------+---------+
+| ID | NAME | COMPANY    | SAALARY |
++----+------+------------+---------+
+|  2 | RAVI | SEGUROSOFT |   60000 |
++----+------+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY LIMIT 0,1;
++----+------+---------+---------+
+| ID | NAME | COMPANY | SAALARY |
++----+------+---------+---------+
+|  1 | ASHU | HCL     |   35000 |
++----+------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY LIMIT 1,1;
++----+------+---------+---------+
+| ID | NAME | COMPANY | SAALARY |
++----+------+---------+---------+
+|  4 | SAI  | TCL     |   45000 |
++----+------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY LIMIT 2,1;
++----+------+---------+---------+
+| ID | NAME | COMPANY | SAALARY |
++----+------+---------+---------+
+|  4 | SAI  | TCL     |   45000 |
++----+------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  4 | SAI       | TCL        |   45000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  5 | AMIT      | CGI        |   56000 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  8 | PRATEEK   | WIPRO      |   60000 |
+|  9 | KANHA     | MINDTREE   |   65000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
++----+-----------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY LIMIT 3,1;
++----+------+---------+---------+
+| ID | NAME | COMPANY | SAALARY |
++----+------+---------+---------+
+|  3 | DEV  | INFOSYS |   50000 |
++----+------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY LIMIT 2,1;
++----+------+---------+---------+
+| ID | NAME | COMPANY | SAALARY |
++----+------+---------+---------+
+|  4 | SAI  | TCL     |   45000 |
++----+------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY DESC LIMIT 3,1;
++----+---------+---------+---------+
+| ID | NAME    | COMPANY | SAALARY |
++----+---------+---------+---------+
+|  8 | PRATEEK | WIPRO   |   60000 |
++----+---------+---------+---------+
+1 row in set (0.00 sec)
