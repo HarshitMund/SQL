@@ -715,3 +715,748 @@ mysql> SELECT * FROM EMPLOYEE ORDER BY SAALARY DESC LIMIT 3,1;
 |  8 | PRATEEK | WIPRO   |   60000 |
 +----+---------+---------+---------+
 1 row in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+				11-MARCH  GROUP BY, ALTER TABLE, UPDATE TABLE, ADD FOREIGN KEY, JOINS
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+mysql> USE RAYS;
+Database changed
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_rays |
++----------------+
+| employee       |
+| marksheet      |
++----------------+
+2 rows in set (0.07 sec)
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  4 | SAI       | TCL        |   45000 |
+|  5 | AMIT      | CGI        |   56000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
+|  8 | PRATEEK   | WIPRO      |   60000 |
+|  9 | KANHA     | MINDTREE   |   65000 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |
++----+-----------+------------+---------+
+10 rows in set (0.01 sec)
+
+mysql> INSERT INTO EMPLOYEE (ID, NAME, COMPANY, SAALARY) VALUES
+    -> (11, 'RAHUL', 'TCS', 52000),
+    -> (12, 'NEHA', 'IBM', 48000),
+    -> (13, 'KARAN', 'DELOITTE', 70000),
+    -> (14, 'POOJA', 'CAPGEMINI', 53000),
+    -> (15, 'ROHIT', 'ORACLE', 62000),
+    -> (16, 'ANJALI', 'COGNIZANT', 47000),
+    -> (17, 'VIVEK', 'HCL', 51000),
+    -> (18, 'NISHA', 'WIPRO', 59000),
+    -> (19, 'ARJUN', 'TCS', 64000),
+    -> (20, 'MEENA', 'INFOSYS', 55000);
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+
+| ID | NAME      | COMPANY    | SAALARY |
++----+-----------+------------+---------+
+|  1 | ASHU      | HCL        |   35000 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |
+|  3 | DEV       | INFOSYS    |   50000 |
+|  4 | SAI       | TCL        |   45000 |
+|  5 | AMIT      | CGI        |   56000 |
+|  6 | BAVARA    | EY         |   45000 |
+|  7 | SIDDHANTA | CGI        |   80000 |
+|  8 | PRATEEK   | WIPRO      |   60000 |
+|  9 | KANHA     | MINDTREE   |   65000 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |
+| 11 | RAHUL     | TCS        |   52000 |
+| 12 | NEHA      | IBM        |   48000 |
+| 13 | KARAN     | DELOITTE   |   70000 |
+| 14 | POOJA     | CAPGEMINI  |   53000 |
+| 15 | ROHIT     | ORACLE     |   62000 |
+| 16 | ANJALI    | COGNIZANT  |   47000 |
+| 17 | VIVEK     | HCL        |   51000 |
+| 18 | NISHA     | WIPRO      |   59000 |
+| 19 | ARJUN     | TCS        |   64000 |
+| 20 | MEENA     | INFOSYS    |   55000 |
++----+-----------+------------+---------+
+20 rows in set (0.00 sec)
+
+mysql> SELECT COMPANY, COUNT(*) FROM EMPLOYEE GROUP BY COMPANY;
++------------+----------+
+| COMPANY    | COUNT(*) |
++------------+----------+
+| HCL        |        2 |
+| SEGUROSOFT |        1 |
+| INFOSYS    |        2 |
+| TCL        |        1 |
+| CGI        |        2 |
+| EY         |        1 |
+| WIPRO      |        2 |
+| MINDTREE   |        1 |
+| ACCENTURE  |        1 |
+| TCS        |        2 |
+| IBM        |        1 |
+| DELOITTE   |        1 |
+| CAPGEMINI  |        1 |
+| ORACLE     |        1 |
+| COGNIZANT  |        1 |
++------------+----------+
+15 rows in set (0.00 sec)
+
+mysql> SELECT SAALARY, SUM(SAALARY) FROM TABLE GROUP BY SAALARY;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE GROUP BY SAALARY' at line 1
+mysql> SELECT SAALARY, SUM(SAALARY) FROM EMPLOYEE GROUP BY SAALARY;
++---------+--------------+
+| SAALARY | SUM(SAALARY) |
++---------+--------------+
+|   35000 |        35000 |
+|   60000 |       120000 |
+|   50000 |        50000 |
+|   45000 |        90000 |
+|   56000 |       112000 |
+|   80000 |        80000 |
+|   65000 |        65000 |
+|   52000 |        52000 |
+|   48000 |        48000 |
+|   70000 |        70000 |
+|   53000 |        53000 |
+|   62000 |        62000 |
+|   47000 |        47000 |
+|   51000 |        51000 |
+|   59000 |        59000 |
+|   64000 |        64000 |
+|   55000 |        55000 |
++---------+--------------+
+17 rows in set (0.00 sec)
+
+mysql> CREATE TABLE DEPARTMENT(ID INT PRIMARY KEY, NAME VARCHAR(45));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO DEPARTMENT VALUES(1, 'HR'),
+    -> (2, 'MANAGER'),
+    -> (3, 'DEVELOPER'),
+    -> (4, 'ACCOUNT'),
+    -> (5, 'ADMIN');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM DEPARTMENT;
++----+-----------+
+| ID | NAME      |
++----+-----------+
+|  1 | HR        |
+|  2 | MANAGER   |
+|  3 | DEVELOPER |
+|  4 | ACCOUNT   |
+|  5 | ADMIN     |
++----+-----------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE EMPLOYEE ADD DEPT_ID INT;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE EMPLOYEE ADD FOREIGN KEY(DEPT_ID) REFERENCES DEPARTMENT(ID);
+Query OK, 20 rows affected (0.08 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET DEPT_ID = 1 WHERE ID = 6 OR ID = 12;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+---------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID |
++----+-----------+------------+---------+---------+
+|  1 | ASHU      | HCL        |   35000 |    NULL |
+|  2 | RAVI      | SEGUROSOFT |   60000 |    NULL |
+|  3 | DEV       | INFOSYS    |   50000 |    NULL |
+|  4 | SAI       | TCL        |   45000 |    NULL |
+|  5 | AMIT      | CGI        |   56000 |    NULL |
+|  6 | BAVARA    | EY         |   45000 |       1 |
+|  7 | SIDDHANTA | CGI        |   80000 |    NULL |
+|  8 | PRATEEK   | WIPRO      |   60000 |    NULL |
+|  9 | KANHA     | MINDTREE   |   65000 |    NULL |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |    NULL |
+| 11 | RAHUL     | TCS        |   52000 |    NULL |
+| 12 | NEHA      | IBM        |   48000 |       1 |
+| 13 | KARAN     | DELOITTE   |   70000 |    NULL |
+| 14 | POOJA     | CAPGEMINI  |   53000 |    NULL |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |
+| 16 | ANJALI    | COGNIZANT  |   47000 |    NULL |
+| 17 | VIVEK     | HCL        |   51000 |    NULL |
+| 18 | NISHA     | WIPRO      |   59000 |    NULL |
+| 19 | ARJUN     | TCS        |   64000 |    NULL |
+| 20 | MEENA     | INFOSYS    |   55000 |    NULL |
++----+-----------+------------+---------+---------+
+20 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET DEPT_ID = 2 WHERE ID = 2 OR ID = 4 OR ID = 5 OR ID = 19 OR ID = 14;
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+---------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID |
++----+-----------+------------+---------+---------+
+|  1 | ASHU      | HCL        |   35000 |    NULL |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |
+|  3 | DEV       | INFOSYS    |   50000 |    NULL |
+|  4 | SAI       | TCL        |   45000 |       2 |
+|  5 | AMIT      | CGI        |   56000 |       2 |
+|  6 | BAVARA    | EY         |   45000 |       1 |
+|  7 | SIDDHANTA | CGI        |   80000 |    NULL |
+|  8 | PRATEEK   | WIPRO      |   60000 |    NULL |
+|  9 | KANHA     | MINDTREE   |   65000 |    NULL |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |    NULL |
+| 11 | RAHUL     | TCS        |   52000 |    NULL |
+| 12 | NEHA      | IBM        |   48000 |       1 |
+| 13 | KARAN     | DELOITTE   |   70000 |    NULL |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |
+| 16 | ANJALI    | COGNIZANT  |   47000 |    NULL |
+| 17 | VIVEK     | HCL        |   51000 |    NULL |
+| 18 | NISHA     | WIPRO      |   59000 |    NULL |
+| 19 | ARJUN     | TCS        |   64000 |       2 |
+| 20 | MEENA     | INFOSYS    |   55000 |    NULL |
++----+-----------+------------+---------+---------+
+20 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET DEPT_ID = 3 WHERE ID = 1 OR ID = 7 OR ID = 8 OR ID = 9 OR ID = 16;
+Query OK, 5 rows affected (0.05 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+---------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID |
++----+-----------+------------+---------+---------+
+|  1 | ASHU      | HCL        |   35000 |       3 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |
+|  3 | DEV       | INFOSYS    |   50000 |    NULL |
+|  4 | SAI       | TCL        |   45000 |       2 |
+|  5 | AMIT      | CGI        |   56000 |       2 |
+|  6 | BAVARA    | EY         |   45000 |       1 |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |    NULL |
+| 11 | RAHUL     | TCS        |   52000 |    NULL |
+| 12 | NEHA      | IBM        |   48000 |       1 |
+| 13 | KARAN     | DELOITTE   |   70000 |    NULL |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |
+| 17 | VIVEK     | HCL        |   51000 |    NULL |
+| 18 | NISHA     | WIPRO      |   59000 |    NULL |
+| 19 | ARJUN     | TCS        |   64000 |       2 |
+| 20 | MEENA     | INFOSYS    |   55000 |    NULL |
++----+-----------+------------+---------+---------+
+20 rows in set (0.00 sec)
+
+mysql> UPDATE EMPLOYEE SET DEPT_ID = 4 WHERE ID = 3 OR ID = 11 OR ID = 13 OR ID = 17 OR ID = 18;
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> UPDATE EMPLOYEE SET DEPT_ID = 5 WHERE ID = 20 OR ID = 10;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+------------+---------+---------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID |
++----+-----------+------------+---------+---------+
+|  1 | ASHU      | HCL        |   35000 |       3 |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |
+|  4 | SAI       | TCL        |   45000 |       2 |
+|  5 | AMIT      | CGI        |   56000 |       2 |
+|  6 | BAVARA    | EY         |   45000 |       1 |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |
+| 11 | RAHUL     | TCS        |   52000 |       4 |
+| 12 | NEHA      | IBM        |   48000 |       1 |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |
+| 17 | VIVEK     | HCL        |   51000 |       4 |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |
+| 19 | ARJUN     | TCS        |   64000 |       2 |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |
++----+-----------+------------+---------+---------+
+20 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE INNER JOIN DEPARTMENT;  /* as i forgot to put condition it is using cross join meaning it is match each record of both table, means employee each record is paired with each department record. */
++----+-----------+------------+---------+---------+----+-----------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID | ID | NAME      |
++----+-----------+------------+---------+---------+----+-----------+
+|  1 | ASHU      | HCL        |   35000 |       3 |  5 | ADMIN     |
+|  1 | ASHU      | HCL        |   35000 |       3 |  4 | ACCOUNT   |
+|  1 | ASHU      | HCL        |   35000 |       3 |  3 | DEVELOPER |
+|  1 | ASHU      | HCL        |   35000 |       3 |  2 | MANAGER   |
+|  1 | ASHU      | HCL        |   35000 |       3 |  1 | HR        |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  5 | ADMIN     |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  4 | ACCOUNT   |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  3 | DEVELOPER |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  2 | MANAGER   |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  1 | HR        |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  5 | ADMIN     |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  4 | ACCOUNT   |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  3 | DEVELOPER |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  2 | MANAGER   |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  1 | HR        |
+|  4 | SAI       | TCL        |   45000 |       2 |  5 | ADMIN     |
+|  4 | SAI       | TCL        |   45000 |       2 |  4 | ACCOUNT   |
+|  4 | SAI       | TCL        |   45000 |       2 |  3 | DEVELOPER |
+|  4 | SAI       | TCL        |   45000 |       2 |  2 | MANAGER   |
+|  4 | SAI       | TCL        |   45000 |       2 |  1 | HR        |
+|  5 | AMIT      | CGI        |   56000 |       2 |  5 | ADMIN     |
+|  5 | AMIT      | CGI        |   56000 |       2 |  4 | ACCOUNT   |
+|  5 | AMIT      | CGI        |   56000 |       2 |  3 | DEVELOPER |
+|  5 | AMIT      | CGI        |   56000 |       2 |  2 | MANAGER   |
+|  5 | AMIT      | CGI        |   56000 |       2 |  1 | HR        |
+|  6 | BAVARA    | EY         |   45000 |       1 |  5 | ADMIN     |
+|  6 | BAVARA    | EY         |   45000 |       1 |  4 | ACCOUNT   |
+|  6 | BAVARA    | EY         |   45000 |       1 |  3 | DEVELOPER |
+|  6 | BAVARA    | EY         |   45000 |       1 |  2 | MANAGER   |
+|  6 | BAVARA    | EY         |   45000 |       1 |  1 | HR        |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  5 | ADMIN     |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  4 | ACCOUNT   |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  3 | DEVELOPER |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  2 | MANAGER   |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  1 | HR        |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  5 | ADMIN     |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  4 | ACCOUNT   |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  3 | DEVELOPER |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  2 | MANAGER   |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  1 | HR        |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  5 | ADMIN     |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  4 | ACCOUNT   |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  3 | DEVELOPER |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  2 | MANAGER   |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  1 | HR        |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  5 | ADMIN     |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  4 | ACCOUNT   |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  3 | DEVELOPER |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  2 | MANAGER   |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  1 | HR        |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  5 | ADMIN     |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  4 | ACCOUNT   |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  3 | DEVELOPER |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  2 | MANAGER   |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  1 | HR        |
+| 12 | NEHA      | IBM        |   48000 |       1 |  5 | ADMIN     |
+| 12 | NEHA      | IBM        |   48000 |       1 |  4 | ACCOUNT   |
+| 12 | NEHA      | IBM        |   48000 |       1 |  3 | DEVELOPER |
+| 12 | NEHA      | IBM        |   48000 |       1 |  2 | MANAGER   |
+| 12 | NEHA      | IBM        |   48000 |       1 |  1 | HR        |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  5 | ADMIN     |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  4 | ACCOUNT   |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  3 | DEVELOPER |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  2 | MANAGER   |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  1 | HR        |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  5 | ADMIN     |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  4 | ACCOUNT   |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  3 | DEVELOPER |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  2 | MANAGER   |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  1 | HR        |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |  5 | ADMIN     |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |  4 | ACCOUNT   |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |  3 | DEVELOPER |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |  2 | MANAGER   |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL |  1 | HR        |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  5 | ADMIN     |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  4 | ACCOUNT   |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  3 | DEVELOPER |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  2 | MANAGER   |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  1 | HR        |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  5 | ADMIN     |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  4 | ACCOUNT   |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  3 | DEVELOPER |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  2 | MANAGER   |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  1 | HR        |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  5 | ADMIN     |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  4 | ACCOUNT   |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  3 | DEVELOPER |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  2 | MANAGER   |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  1 | HR        |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  5 | ADMIN     |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  4 | ACCOUNT   |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  3 | DEVELOPER |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  2 | MANAGER   |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  1 | HR        |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  5 | ADMIN     |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  4 | ACCOUNT   |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  3 | DEVELOPER |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  2 | MANAGER   |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  1 | HR        |
++----+-----------+------------+---------+---------+----+-----------+
+100 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE INNER JOIN DEPARTMENT WHERE EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++----+-----------+------------+---------+---------+----+-----------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID | ID | NAME      |
++----+-----------+------------+---------+---------+----+-----------+
+|  6 | BAVARA    | EY         |   45000 |       1 |  1 | HR        |
+| 12 | NEHA      | IBM        |   48000 |       1 |  1 | HR        |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  2 | MANAGER   |
+|  4 | SAI       | TCL        |   45000 |       2 |  2 | MANAGER   |
+|  5 | AMIT      | CGI        |   56000 |       2 |  2 | MANAGER   |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  2 | MANAGER   |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  2 | MANAGER   |
+|  1 | ASHU      | HCL        |   35000 |       3 |  3 | DEVELOPER |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  3 | DEVELOPER |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  3 | DEVELOPER |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  3 | DEVELOPER |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  3 | DEVELOPER |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  4 | ACCOUNT   |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  4 | ACCOUNT   |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  4 | ACCOUNT   |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  4 | ACCOUNT   |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  4 | ACCOUNT   |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  5 | ADMIN     |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  5 | ADMIN     |
++----+-----------+------------+---------+---------+----+-----------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LEFT JOIN DEPARTMENT WHERE EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE EMPLOYEE.DEPT_ID = DEPARTMENT.ID' at line 1
+mysql> SELECT * FROM EMPLOYEE LEFT JOIN DEPARTMENT WHERE EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE EMPLOYEE.DEPT_ID = DEPARTMENT.ID' at line 1
+mysql> select * from employee left join department on employee.dept_id = department.id;
++----+-----------+------------+---------+---------+------+-----------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID | ID   | NAME      |
++----+-----------+------------+---------+---------+------+-----------+
+|  1 | ASHU      | HCL        |   35000 |       3 |    3 | DEVELOPER |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |    2 | MANAGER   |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |    4 | ACCOUNT   |
+|  4 | SAI       | TCL        |   45000 |       2 |    2 | MANAGER   |
+|  5 | AMIT      | CGI        |   56000 |       2 |    2 | MANAGER   |
+|  6 | BAVARA    | EY         |   45000 |       1 |    1 | HR        |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |    3 | DEVELOPER |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |    3 | DEVELOPER |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |    3 | DEVELOPER |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |    5 | ADMIN     |
+| 11 | RAHUL     | TCS        |   52000 |       4 |    4 | ACCOUNT   |
+| 12 | NEHA      | IBM        |   48000 |       1 |    1 | HR        |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |    4 | ACCOUNT   |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |    2 | MANAGER   |
+| 15 | ROHIT     | ORACLE     |   62000 |    NULL | NULL | NULL      |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |    3 | DEVELOPER |
+| 17 | VIVEK     | HCL        |   51000 |       4 |    4 | ACCOUNT   |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |    4 | ACCOUNT   |
+| 19 | ARJUN     | TCS        |   64000 |       2 |    2 | MANAGER   |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |    5 | ADMIN     |
++----+-----------+------------+---------+---------+------+-----------+
+20 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE RIGHT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++------+-----------+------------+---------+---------+----+-----------+
+| ID   | NAME      | COMPANY    | SAALARY | DEPT_ID | ID | NAME      |
++------+-----------+------------+---------+---------+----+-----------+
+|    6 | BAVARA    | EY         |   45000 |       1 |  1 | HR        |
+|   12 | NEHA      | IBM        |   48000 |       1 |  1 | HR        |
+|    2 | RAVI      | SEGUROSOFT |   60000 |       2 |  2 | MANAGER   |
+|    4 | SAI       | TCL        |   45000 |       2 |  2 | MANAGER   |
+|    5 | AMIT      | CGI        |   56000 |       2 |  2 | MANAGER   |
+|   14 | POOJA     | CAPGEMINI  |   53000 |       2 |  2 | MANAGER   |
+|   19 | ARJUN     | TCS        |   64000 |       2 |  2 | MANAGER   |
+|    1 | ASHU      | HCL        |   35000 |       3 |  3 | DEVELOPER |
+|    7 | SIDDHANTA | CGI        |   80000 |       3 |  3 | DEVELOPER |
+|    8 | PRATEEK   | WIPRO      |   60000 |       3 |  3 | DEVELOPER |
+|    9 | KANHA     | MINDTREE   |   65000 |       3 |  3 | DEVELOPER |
+|   16 | ANJALI    | COGNIZANT  |   47000 |       3 |  3 | DEVELOPER |
+|    3 | DEV       | INFOSYS    |   50000 |       4 |  4 | ACCOUNT   |
+|   11 | RAHUL     | TCS        |   52000 |       4 |  4 | ACCOUNT   |
+|   13 | KARAN     | DELOITTE   |   70000 |       4 |  4 | ACCOUNT   |
+|   17 | VIVEK     | HCL        |   51000 |       4 |  4 | ACCOUNT   |
+|   18 | NISHA     | WIPRO      |   59000 |       4 |  4 | ACCOUNT   |
+|   10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  5 | ADMIN     |
+|   20 | MEENA     | INFOSYS    |   55000 |       5 |  5 | ADMIN     |
++------+-----------+------------+---------+---------+----+-----------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE RIGHT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID UNION SELECT * FROM EMPLOYEE LEFT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++------+-----------+------------+---------+---------+------+-----------+
+| ID   | NAME      | COMPANY    | SAALARY | DEPT_ID | ID   | NAME      |
++------+-----------+------------+---------+---------+------+-----------+
+|    6 | BAVARA    | EY         |   45000 |       1 |    1 | HR        |
+|   12 | NEHA      | IBM        |   48000 |       1 |    1 | HR        |
+|    2 | RAVI      | SEGUROSOFT |   60000 |       2 |    2 | MANAGER   |
+|    4 | SAI       | TCL        |   45000 |       2 |    2 | MANAGER   |
+|    5 | AMIT      | CGI        |   56000 |       2 |    2 | MANAGER   |
+|   14 | POOJA     | CAPGEMINI  |   53000 |       2 |    2 | MANAGER   |
+|   19 | ARJUN     | TCS        |   64000 |       2 |    2 | MANAGER   |
+|    1 | ASHU      | HCL        |   35000 |       3 |    3 | DEVELOPER |
+|    7 | SIDDHANTA | CGI        |   80000 |       3 |    3 | DEVELOPER |
+|    8 | PRATEEK   | WIPRO      |   60000 |       3 |    3 | DEVELOPER |
+|    9 | KANHA     | MINDTREE   |   65000 |       3 |    3 | DEVELOPER |
+|   16 | ANJALI    | COGNIZANT  |   47000 |       3 |    3 | DEVELOPER |
+|    3 | DEV       | INFOSYS    |   50000 |       4 |    4 | ACCOUNT   |
+|   11 | RAHUL     | TCS        |   52000 |       4 |    4 | ACCOUNT   |
+|   13 | KARAN     | DELOITTE   |   70000 |       4 |    4 | ACCOUNT   |
+|   17 | VIVEK     | HCL        |   51000 |       4 |    4 | ACCOUNT   |
+|   18 | NISHA     | WIPRO      |   59000 |       4 |    4 | ACCOUNT   |
+|   10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |    5 | ADMIN     |
+|   20 | MEENA     | INFOSYS    |   55000 |       5 |    5 | ADMIN     |
+|   15 | ROHIT     | ORACLE     |   62000 |    NULL | NULL | NULL      |
++------+-----------+------------+---------+---------+------+-----------+
+20 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE (ID, NAME, COMPANY, SAALARY) VALUES
+    -> (21, 'RAJ', 'TECHMAHINDRA', 54000),
+    -> (22, 'SONIA', 'HCL', 47000),
+    -> (23, 'AMAN', 'INFOSYS', 61000),
+    -> (24, 'PRIYA', 'WIPRO', 52000),
+    -> (25, 'NIKHIL', 'TCS', 58000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO DEPARTMENT (ID, NAME) VALUES
+    -> (6, 'SALES'),
+    -> (7, 'MARKETING');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE;
++----+-----------+--------------+---------+---------+
+| ID | NAME      | COMPANY      | SAALARY | DEPT_ID |
++----+-----------+--------------+---------+---------+
+|  1 | ASHU      | HCL          |   35000 |       3 |
+|  2 | RAVI      | SEGUROSOFT   |   60000 |       2 |
+|  3 | DEV       | INFOSYS      |   50000 |       4 |
+|  4 | SAI       | TCL          |   45000 |       2 |
+|  5 | AMIT      | CGI          |   56000 |       2 |
+|  6 | BAVARA    | EY           |   45000 |       1 |
+|  7 | SIDDHANTA | CGI          |   80000 |       3 |
+|  8 | PRATEEK   | WIPRO        |   60000 |       3 |
+|  9 | KANHA     | MINDTREE     |   65000 |       3 |
+| 10 | HIMANSHU  | ACCENTURE    |   56000 |       5 |
+| 11 | RAHUL     | TCS          |   52000 |       4 |
+| 12 | NEHA      | IBM          |   48000 |       1 |
+| 13 | KARAN     | DELOITTE     |   70000 |       4 |
+| 14 | POOJA     | CAPGEMINI    |   53000 |       2 |
+| 15 | ROHIT     | ORACLE       |   62000 |    NULL |
+| 16 | ANJALI    | COGNIZANT    |   47000 |       3 |
+| 17 | VIVEK     | HCL          |   51000 |       4 |
+| 18 | NISHA     | WIPRO        |   59000 |       4 |
+| 19 | ARJUN     | TCS          |   64000 |       2 |
+| 20 | MEENA     | INFOSYS      |   55000 |       5 |
+| 21 | RAJ       | TECHMAHINDRA |   54000 |    NULL |
+| 22 | SONIA     | HCL          |   47000 |    NULL |
+| 23 | AMAN      | INFOSYS      |   61000 |    NULL |
+| 24 | PRIYA     | WIPRO        |   52000 |    NULL |
+| 25 | NIKHIL    | TCS          |   58000 |    NULL |
++----+-----------+--------------+---------+---------+
+25 rows in set (0.00 sec)
+
+mysql> SELECT * FROM DEPARTMENT;
++----+-----------+
+| ID | NAME      |
++----+-----------+
+|  1 | HR        |
+|  2 | MANAGER   |
+|  3 | DEVELOPER |
+|  4 | ACCOUNT   |
+|  5 | ADMIN     |
+|  6 | SALES     |
+|  7 | MARKETING |
++----+-----------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE INNER JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++----+-----------+------------+---------+---------+----+-----------+
+| ID | NAME      | COMPANY    | SAALARY | DEPT_ID | ID | NAME      |
++----+-----------+------------+---------+---------+----+-----------+
+|  6 | BAVARA    | EY         |   45000 |       1 |  1 | HR        |
+| 12 | NEHA      | IBM        |   48000 |       1 |  1 | HR        |
+|  2 | RAVI      | SEGUROSOFT |   60000 |       2 |  2 | MANAGER   |
+|  4 | SAI       | TCL        |   45000 |       2 |  2 | MANAGER   |
+|  5 | AMIT      | CGI        |   56000 |       2 |  2 | MANAGER   |
+| 14 | POOJA     | CAPGEMINI  |   53000 |       2 |  2 | MANAGER   |
+| 19 | ARJUN     | TCS        |   64000 |       2 |  2 | MANAGER   |
+|  1 | ASHU      | HCL        |   35000 |       3 |  3 | DEVELOPER |
+|  7 | SIDDHANTA | CGI        |   80000 |       3 |  3 | DEVELOPER |
+|  8 | PRATEEK   | WIPRO      |   60000 |       3 |  3 | DEVELOPER |
+|  9 | KANHA     | MINDTREE   |   65000 |       3 |  3 | DEVELOPER |
+| 16 | ANJALI    | COGNIZANT  |   47000 |       3 |  3 | DEVELOPER |
+|  3 | DEV       | INFOSYS    |   50000 |       4 |  4 | ACCOUNT   |
+| 11 | RAHUL     | TCS        |   52000 |       4 |  4 | ACCOUNT   |
+| 13 | KARAN     | DELOITTE   |   70000 |       4 |  4 | ACCOUNT   |
+| 17 | VIVEK     | HCL        |   51000 |       4 |  4 | ACCOUNT   |
+| 18 | NISHA     | WIPRO      |   59000 |       4 |  4 | ACCOUNT   |
+| 10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  5 | ADMIN     |
+| 20 | MEENA     | INFOSYS    |   55000 |       5 |  5 | ADMIN     |
++----+-----------+------------+---------+---------+----+-----------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE RIGHT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++------+-----------+------------+---------+---------+----+-----------+
+| ID   | NAME      | COMPANY    | SAALARY | DEPT_ID | ID | NAME      |
++------+-----------+------------+---------+---------+----+-----------+
+|    6 | BAVARA    | EY         |   45000 |       1 |  1 | HR        |
+|   12 | NEHA      | IBM        |   48000 |       1 |  1 | HR        |
+|    2 | RAVI      | SEGUROSOFT |   60000 |       2 |  2 | MANAGER   |
+|    4 | SAI       | TCL        |   45000 |       2 |  2 | MANAGER   |
+|    5 | AMIT      | CGI        |   56000 |       2 |  2 | MANAGER   |
+|   14 | POOJA     | CAPGEMINI  |   53000 |       2 |  2 | MANAGER   |
+|   19 | ARJUN     | TCS        |   64000 |       2 |  2 | MANAGER   |
+|    1 | ASHU      | HCL        |   35000 |       3 |  3 | DEVELOPER |
+|    7 | SIDDHANTA | CGI        |   80000 |       3 |  3 | DEVELOPER |
+|    8 | PRATEEK   | WIPRO      |   60000 |       3 |  3 | DEVELOPER |
+|    9 | KANHA     | MINDTREE   |   65000 |       3 |  3 | DEVELOPER |
+|   16 | ANJALI    | COGNIZANT  |   47000 |       3 |  3 | DEVELOPER |
+|    3 | DEV       | INFOSYS    |   50000 |       4 |  4 | ACCOUNT   |
+|   11 | RAHUL     | TCS        |   52000 |       4 |  4 | ACCOUNT   |
+|   13 | KARAN     | DELOITTE   |   70000 |       4 |  4 | ACCOUNT   |
+|   17 | VIVEK     | HCL        |   51000 |       4 |  4 | ACCOUNT   |
+|   18 | NISHA     | WIPRO      |   59000 |       4 |  4 | ACCOUNT   |
+|   10 | HIMANSHU  | ACCENTURE  |   56000 |       5 |  5 | ADMIN     |
+|   20 | MEENA     | INFOSYS    |   55000 |       5 |  5 | ADMIN     |
+| NULL | NULL      | NULL       |    NULL |    NULL |  6 | SALES     |
+| NULL | NULL      | NULL       |    NULL |    NULL |  7 | MARKETING |
++------+-----------+------------+---------+---------+----+-----------+
+21 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE LEFT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++----+-----------+--------------+---------+---------+------+-----------+
+| ID | NAME      | COMPANY      | SAALARY | DEPT_ID | ID   | NAME      |
++----+-----------+--------------+---------+---------+------+-----------+
+|  1 | ASHU      | HCL          |   35000 |       3 |    3 | DEVELOPER |
+|  2 | RAVI      | SEGUROSOFT   |   60000 |       2 |    2 | MANAGER   |
+|  3 | DEV       | INFOSYS      |   50000 |       4 |    4 | ACCOUNT   |
+|  4 | SAI       | TCL          |   45000 |       2 |    2 | MANAGER   |
+|  5 | AMIT      | CGI          |   56000 |       2 |    2 | MANAGER   |
+|  6 | BAVARA    | EY           |   45000 |       1 |    1 | HR        |
+|  7 | SIDDHANTA | CGI          |   80000 |       3 |    3 | DEVELOPER |
+|  8 | PRATEEK   | WIPRO        |   60000 |       3 |    3 | DEVELOPER |
+|  9 | KANHA     | MINDTREE     |   65000 |       3 |    3 | DEVELOPER |
+| 10 | HIMANSHU  | ACCENTURE    |   56000 |       5 |    5 | ADMIN     |
+| 11 | RAHUL     | TCS          |   52000 |       4 |    4 | ACCOUNT   |
+| 12 | NEHA      | IBM          |   48000 |       1 |    1 | HR        |
+| 13 | KARAN     | DELOITTE     |   70000 |       4 |    4 | ACCOUNT   |
+| 14 | POOJA     | CAPGEMINI    |   53000 |       2 |    2 | MANAGER   |
+| 15 | ROHIT     | ORACLE       |   62000 |    NULL | NULL | NULL      |
+| 16 | ANJALI    | COGNIZANT    |   47000 |       3 |    3 | DEVELOPER |
+| 17 | VIVEK     | HCL          |   51000 |       4 |    4 | ACCOUNT   |
+| 18 | NISHA     | WIPRO        |   59000 |       4 |    4 | ACCOUNT   |
+| 19 | ARJUN     | TCS          |   64000 |       2 |    2 | MANAGER   |
+| 20 | MEENA     | INFOSYS      |   55000 |       5 |    5 | ADMIN     |
+| 21 | RAJ       | TECHMAHINDRA |   54000 |    NULL | NULL | NULL      |
+| 22 | SONIA     | HCL          |   47000 |    NULL | NULL | NULL      |
+| 23 | AMAN      | INFOSYS      |   61000 |    NULL | NULL | NULL      |
+| 24 | PRIYA     | WIPRO        |   52000 |    NULL | NULL | NULL      |
+| 25 | NIKHIL    | TCS          |   58000 |    NULL | NULL | NULL      |
++----+-----------+--------------+---------+---------+------+-----------+
+25 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE RIGHT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID UNION SELECT * FROM EMPLOYEE LEFT JOIN DEPARTMENT ON EMPLOYEE.DEPT_ID = DEPARTMENT.ID;
++------+-----------+--------------+---------+---------+------+-----------+
+| ID   | NAME      | COMPANY      | SAALARY | DEPT_ID | ID   | NAME      |
++------+-----------+--------------+---------+---------+------+-----------+
+|    6 | BAVARA    | EY           |   45000 |       1 |    1 | HR        |
+|   12 | NEHA      | IBM          |   48000 |       1 |    1 | HR        |
+|    2 | RAVI      | SEGUROSOFT   |   60000 |       2 |    2 | MANAGER   |
+|    4 | SAI       | TCL          |   45000 |       2 |    2 | MANAGER   |
+|    5 | AMIT      | CGI          |   56000 |       2 |    2 | MANAGER   |
+|   14 | POOJA     | CAPGEMINI    |   53000 |       2 |    2 | MANAGER   |
+|   19 | ARJUN     | TCS          |   64000 |       2 |    2 | MANAGER   |
+|    1 | ASHU      | HCL          |   35000 |       3 |    3 | DEVELOPER |
+|    7 | SIDDHANTA | CGI          |   80000 |       3 |    3 | DEVELOPER |
+|    8 | PRATEEK   | WIPRO        |   60000 |       3 |    3 | DEVELOPER |
+|    9 | KANHA     | MINDTREE     |   65000 |       3 |    3 | DEVELOPER |
+|   16 | ANJALI    | COGNIZANT    |   47000 |       3 |    3 | DEVELOPER |
+|    3 | DEV       | INFOSYS      |   50000 |       4 |    4 | ACCOUNT   |
+|   11 | RAHUL     | TCS          |   52000 |       4 |    4 | ACCOUNT   |
+|   13 | KARAN     | DELOITTE     |   70000 |       4 |    4 | ACCOUNT   |
+|   17 | VIVEK     | HCL          |   51000 |       4 |    4 | ACCOUNT   |
+|   18 | NISHA     | WIPRO        |   59000 |       4 |    4 | ACCOUNT   |
+|   10 | HIMANSHU  | ACCENTURE    |   56000 |       5 |    5 | ADMIN     |
+|   20 | MEENA     | INFOSYS      |   55000 |       5 |    5 | ADMIN     |
+| NULL | NULL      | NULL         |    NULL |    NULL |    6 | SALES     |
+| NULL | NULL      | NULL         |    NULL |    NULL |    7 | MARKETING |
+|   15 | ROHIT     | ORACLE       |   62000 |    NULL | NULL | NULL      |
+|   21 | RAJ       | TECHMAHINDRA |   54000 |    NULL | NULL | NULL      |
+|   22 | SONIA     | HCL          |   47000 |    NULL | NULL | NULL      |
+|   23 | AMAN      | INFOSYS      |   61000 |    NULL | NULL | NULL      |
+|   24 | PRIYA     | WIPRO        |   52000 |    NULL | NULL | NULL      |
+|   25 | NIKHIL    | TCS          |   58000 |    NULL | NULL | NULL      |
++------+-----------+--------------+---------+---------+------+-----------+
+27 rows in set (0.00 sec)
+
+mysql> SELECT E.ID, E.NAME, D.NAME AS DEPARTMENT
+    -> FROM EMPLOYEE E
+    -> LEFT JOIN DEPARTMENT D
+    -> ON E.DEPT_ID = D.ID
+    ->
+    -> UNION
+    ->
+    -> SELECT E.ID, E.NAME, D.NAME AS DEPARTMENT
+    -> FROM EMPLOYEE E
+    -> RIGHT JOIN DEPARTMENT D
+    -> ON E.DEPT_ID = D.ID
+    -> WHERE E.DEPT_ID IS NULL;
++------+-----------+------------+
+| ID   | NAME      | DEPARTMENT |
++------+-----------+------------+
+|    1 | ASHU      | DEVELOPER  |
+|    2 | RAVI      | MANAGER    |
+|    3 | DEV       | ACCOUNT    |
+|    4 | SAI       | MANAGER    |
+|    5 | AMIT      | MANAGER    |
+|    6 | BAVARA    | HR         |
+|    7 | SIDDHANTA | DEVELOPER  |
+|    8 | PRATEEK   | DEVELOPER  |
+|    9 | KANHA     | DEVELOPER  |
+|   10 | HIMANSHU  | ADMIN      |
+|   11 | RAHUL     | ACCOUNT    |
+|   12 | NEHA      | HR         |
+|   13 | KARAN     | ACCOUNT    |
+|   14 | POOJA     | MANAGER    |
+|   15 | ROHIT     | NULL       |
+|   16 | ANJALI    | DEVELOPER  |
+|   17 | VIVEK     | ACCOUNT    |
+|   18 | NISHA     | ACCOUNT    |
+|   19 | ARJUN     | MANAGER    |
+|   20 | MEENA     | ADMIN      |
+|   21 | RAJ       | NULL       |
+|   22 | SONIA     | NULL       |
+|   23 | AMAN      | NULL       |
+|   24 | PRIYA     | NULL       |
+|   25 | NIKHIL    | NULL       |
+| NULL | NULL      | SALES      |
+| NULL | NULL      | MARKETING  |
++------+-----------+------------+
+27 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE E LEFT JOIN DEPARTMENT D ON E.DEPT_ID = D.ID WHERE D.ID IS NULL
+    -> UNION
+    -> SELECT * FROM EMPLOYEE E RIGHT JOIN DEPARTMENT D ON E.DEPT_ID = D.ID WHERE E.DEPT IS NULL;
+ERROR 1054 (42S22): Unknown column 'E.DEPT' in 'where clause'
+mysql> SELECT * FROM EMPLOYEE E LEFT JOIN DEPARTMENT D ON E.DEPT_ID = D.ID WHERE D.ID IS NULL
+    -> UNION
+    -> SELECT * FROM EMPLOYEE E RIGHT JOIN DEPARTMENT D ON E.DEPT_ID = D.ID WHERE E.DEPT_ID IS NULL;
++------+--------+--------------+---------+---------+------+-----------+
+| ID   | NAME   | COMPANY      | SAALARY | DEPT_ID | ID   | NAME      |
++------+--------+--------------+---------+---------+------+-----------+
+|   15 | ROHIT  | ORACLE       |   62000 |    NULL | NULL | NULL      |
+|   21 | RAJ    | TECHMAHINDRA |   54000 |    NULL | NULL | NULL      |
+|   22 | SONIA  | HCL          |   47000 |    NULL | NULL | NULL      |
+|   23 | AMAN   | INFOSYS      |   61000 |    NULL | NULL | NULL      |
+|   24 | PRIYA  | WIPRO        |   52000 |    NULL | NULL | NULL      |
+|   25 | NIKHIL | TCS          |   58000 |    NULL | NULL | NULL      |
+| NULL | NULL   | NULL         |    NULL |    NULL |    6 | SALES     |
+| NULL | NULL   | NULL         |    NULL |    NULL |    7 | MARKETING |
++------+--------+--------------+---------+---------+------+-----------+
+8 rows in set (0.00 sec)
+
